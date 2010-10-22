@@ -196,7 +196,7 @@ module.exports = {
     assert.equal(Error, set([]));
 
     assert.eql(new Buffer('test'), set(new Buffer('test')));
-    assert.ok(date instanceof TypeSchema);
+    assert.ok(bin instanceof TypeSchema);
   },
   
   'test oid type definition': function(){
