@@ -183,6 +183,22 @@ module.exports = {
     assert.ok(date instanceof TypeSchema);
   },
   
+  'test binary type definition': function(){
+    var bin = type('binary')
+      , set = bin.setters[0];
+
+    assert.equal('binary', bin.type);
+    assert.length(bin.setters, 1);
+    assert.equal(Error, set('something'));
+    assert.equal(Error, set(0));
+    assert.equal(Error, set());
+    assert.equal(Error, set({}));
+    assert.equal(Error, set([]));
+
+    assert.eql(new Buffer('test'), set(new Buffer('test')));
+    assert.ok(date instanceof TypeSchema);
+  },
+  
   'test oid type definition': function(){
     var oid = type('oid');
 
