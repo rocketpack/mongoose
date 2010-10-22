@@ -17,6 +17,7 @@ document('User')
   .number('age').default(1)
   .bool('blocked')
   .bool('awesome').default(true)
+  .binary('avatar')
   .array('roles');
   
 var User = mongoose.User;
@@ -45,10 +46,11 @@ module.exports = {
       name: {
           first: 'TJ'
         , last: 'Holowaychuk'
-      },
-      roles: ['admin'],
-      blocked: true,
-      visits: 20
+      }
+      , roles: ['admin']
+      , avatar: new Buffer('some image data')
+      , blocked: true
+      , visits: 20
     });
     
     var tobi = new User({
@@ -56,9 +58,9 @@ module.exports = {
       name: {
           first: 'Tobi'
         , last: 'Holowaychuk'
-      },
-      roles: ['ferret', 'pet'],
-      visits: 10
+      }
+      , roles: ['ferret', 'pet']
+      , visits: 10
     });
     
     var raul = new User({
@@ -66,9 +68,9 @@ module.exports = {
       name: {
           first: 'Raul'
         , last: 'Rauch'
-      },
-      roles: ['dog', 'pet'],
-      visits: 5
+      }
+      , roles: ['dog', 'pet']
+      , visits: 5
     });
       
     nathan.save(function(errors){
@@ -166,6 +168,13 @@ module.exports = {
     User.notBlocked.awesome.all(function(docs){
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
+      done();
+    });
+  },
+  
+  'test fetching binary': function(assert, done){
+    User.find('name.first', 'TJ').one(function(doc){
+      assert.eql(new Buffer('some image data'), doc.avatar);
       done();
     });
   },
