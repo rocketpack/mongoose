@@ -3,7 +3,6 @@ EXPRESSO = support/expresso/bin/expresso -I lib --serial
 
 TESTS = tests/indexing.js \
 				tests/dbref.js \
-				tests/dbrefArray.js \
 				tests/document.js \
 				tests/documentation.js \
 				tests/index.js \

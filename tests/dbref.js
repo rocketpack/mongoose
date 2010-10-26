@@ -68,7 +68,7 @@ module.exports = {
         name: 'Lassie'
       }
     }).save( function (errors, user) {
-      Dog.find({name: 'Lassie'}).first( function (dog) {
+      Dog.find({name: 'Lassie'}).first( function (err, dog) {
         user.dog.do( function (puppy) {
           assert.ok(puppy.id === dog.id);
           done();
@@ -144,7 +144,7 @@ module.exports = {
       user.dog.do( function (dog) {
         dog.name = 'Hooch the 2nd';
         user.save( function (errors, user) {
-          Dog.findById(dog.id, function (found) {
+          Dog.findById(dog.id, function (err, found) {
             assert.ok(found.name === 'Hooch the 2nd');
             done();
           });

@@ -66,10 +66,12 @@ module.exports = {
       ]
     }).save( function (errors, cuisine) {
       cuisine.restaurants.forEach( function (diner) {
-        Restaurant.find({name: diner.name}).first( function (found) {
-          assert.ok(diner.id === found.id);
-          if (++count === 2) done();
-        });
+        Restaurant.find({name: diner.name}).first( function (diner) {
+          return function (err, found) {
+            assert.ok(diner.id === found.id);
+            if (++count === 2) done();
+          };
+        }(diner));
       });
     });
   },
@@ -100,7 +102,7 @@ module.exports = {
       cuisine.restaurants.forEach( function (diner) {
         diner.name = 'Kiss Sushi';
         cuisine.save( function (errors, cuis) {
-          Restaurant.findById(diner.id, function (found) {
+          Restaurant.findById(diner.id, function (err, found) {
             assert.ok(found.name === 'Kiss Sushi');
             done();
           });
