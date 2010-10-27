@@ -26,6 +26,21 @@ module.exports = {
       });
     });
   },
+  'setting an array upon initialization': function (assert, done) {
+    var user = new User({
+      name: 'Sid',
+      thoughts: [
+        {descr: 'Hello'},
+        {descr: 'World'}
+      ]
+    });
+    user.thoughts.all( function (_thoughts) {
+      assert.equal(_thoughts.length, 2);
+      assert.equal(_thoughts[0].descr, 'Hello');
+      assert.equal(_thoughts[1].descr, 'World');
+      done();
+    });
+  },
   'building a new member of the array': function (assert, done) {
     var user = new User({name: 'Brian'});
     user.thoughts.build({
