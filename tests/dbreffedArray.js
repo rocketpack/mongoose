@@ -17,6 +17,7 @@ mongoose.define('CoolUser')
                           // TODO ... .page(3), equiv to .page({limit: 10, skip: 20})
 var User = mongoose.CoolUser;
 
+// TODO Test forEach, slice, splice, filter, map
 module.exports = {
   setup: function (done) {
     Thought.remove({}, function () {
