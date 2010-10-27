@@ -76,16 +76,12 @@ module.exports = {
     Film.indexes(true, function (indexes) {
       assert.deepEqual(indexes[6], [['imdbId', 1]]);
       new Film({imdbId: 1}).save( function (errors1, film1) {
-        try {
-          new Film({imdbId: 1}).save( function (errors2, film2) {
-            assert.isNotNull(errors2);
-            // TODO Error is not being thrown!
-            done();
-          });
-        } catch (e) {
-          assert.isNotNull(e);
+        new Film({imdbId: 1}).save( function (errors2, film2) {
+          console.log(errors2);
+          assert.isNotNull(errors2);
+          // TODO Error is not being thrown!
           done();
-        }
+        });
       });
     });
   },

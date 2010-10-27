@@ -1,6 +1,6 @@
 var assert = require('assert')
   , mongoose = require('mongoose')
-  , db = mongoose.connect('mongodb://localhost/mongoose_integration_tests');
+  , db = mongoose.connect('mongodb://localhost/dbrefTests');
 
 mongoose.define('Dog')
   .oid('_id')
