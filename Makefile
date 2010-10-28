@@ -6,7 +6,6 @@ TESTS =	tests/dbreffedArray.js \
 				tests/dbref.js \
 				tests/dbrefArray.js \
 				tests/document.js \
-				tests/documentation.js \
 				tests/index.js \
 				tests/schema.js \
 				tests/types.js \

@@ -468,7 +468,7 @@ module.exports = {
     });
     
     VT.hook('save', function(parent, callback){
-      if (++saves == 1) assert.ok(this._.errors.length == 2);
+      if (++saves == 1) assert.length(this._.errors, 2);
       parent(callback);
     });
   
