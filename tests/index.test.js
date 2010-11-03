@@ -29,7 +29,7 @@ module.exports = {
       try{
         mongoose.connect('mongodb://localhost/')
       } catch(e){
-        assert.ok(/provide a database/.test(e.message));       
+        assert.ok(/provide a database/.test(e.message));
       }
   },
   
