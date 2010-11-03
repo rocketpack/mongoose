@@ -1,7 +1,7 @@
 var assert = require('assert')
   , mongoose = require('mongoose')
   , document = mongoose.define
-  , db = mongoose.connect('mongodb://localhost/mongoose_integration_query');
+  , db = require('./common').db;
 
 document('User')
   .oid('_id')
@@ -19,11 +19,14 @@ document('User')
   .bool('awesome').default(true)
   .array('roles');
   
-var User = mongoose.User;
+var User;
 
 module.exports = {
   before: function(assert, done){
-    User.drop(done);
+    db.onConnect(function(){
+      User = mongoose.User;
+      User.drop(done);
+    });
   },
 
   'test simple document insertion': function(assert, done){
