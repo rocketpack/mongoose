@@ -10,7 +10,7 @@ var assert = require('assert')
 
 module.exports = {
   before: function(assert, done){
-    db = mongoose.connect('mongodb://localhost/mongose', null, done);
+    db = mongoose.connect('mongodb://localhost/mongoose', null, done);
   },
 
   'test connection path errors': function(){
