@@ -95,6 +95,17 @@ module.exports = {
     });
   },
   
+  'test forEach()': function(assert, done){
+    var docs = [];
+    User.find().forEach(function(doc){
+      docs.push(docs);
+    }).done(function(err){
+      assert.ok(!err);
+      assert.length(docs, 4);
+      done();
+    });
+  },
+  
   'test first()': function(assert, done){
     User.first().all(function(err, docs){
       assert.ok(!err);
