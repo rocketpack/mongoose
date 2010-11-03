@@ -2,12 +2,6 @@ var assert = require('assert')
   , mongoose = require('mongoose')
   , Document = mongoose.Document;
 
-function timeout(goose){
-  return setTimeout(function(){
-    assert.ok(false, 'Connection timeout');
-  },5000);
-}
-
 module.exports = {
   'test connection path errors': function(){
       try{
