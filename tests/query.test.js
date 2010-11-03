@@ -48,6 +48,7 @@ module.exports = {
       },
       roles: ['admin'],
       blocked: true,
+      age: 23,
       visits: 20
     });
     
@@ -118,7 +119,7 @@ module.exports = {
     User.first(2).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal(1, docs[1].age);
+      assert.equal(23, docs[1].age);
       done();
     });
   },
@@ -206,8 +207,8 @@ module.exports = {
       assert.ok(!err);
       assert.length(docs, 1);
       assert.isUndefined(docs[0].visits);
-      assert.isUndefined(docs[0].name);
       assert.equal(23, docs[0].age);
+      assert.eql({}, docs[0].name);
       assert.eql({}, docs[0].contact);
       done();
     });
