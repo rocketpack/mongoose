@@ -31,9 +31,7 @@ var tobi = new User({ name: { first: 'Tobi', last: 'ferret' }, age: 1 })
 tobi.save(function(){
   bandit.save(function(){
     tj.save(function(){
-      jane.save(function(){
-        saved();
-      });
+      jane.save(saved);
     });
   });
 });
