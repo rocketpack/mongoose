@@ -1,5 +1,5 @@
 var assert = require('assert')
-  , mongoose = require('mongoose')
+  , mongoose = require('mongoose').new()
   , Schema = mongoose.Schema
   , TypeSchema = mongoose.TypeSchema;
   

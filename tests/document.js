@@ -1,8 +1,12 @@
 
 var assert = require('assert')
-  , mongoose = require('mongoose')
+  , mongoose = require('mongoose').new()
   , document = mongoose.define
-  , db = mongoose.connect('mongodb://localhost/mongoose_document_tests');
+  , db = mongoose.connect('mongodb://localhost/mongoose_tests');
+
+//console.log(mongoose)
+//var x = mongoose.new();
+//console.log(x);
 
 module.exports = {
     

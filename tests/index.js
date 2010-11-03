@@ -1,6 +1,7 @@
 var assert = require('assert')
-  , mongoose = require('mongoose')
-  , Document = mongoose.Document;
+  , mongoose = require('mongoose').new()
+  , Document = mongoose.Document
+  , db = mongoose.connect('mongodb://localhost/mongoose_tests');
 
 function timeout(goose){
   return setTimeout(function(){
@@ -10,29 +11,29 @@ function timeout(goose){
 
 module.exports = {
 
-  // 'test connecting to mongodb': function(assert, done){
-  //   var mongoose = require('mongoose'),
-  //       timer = timeout(mongoose);
-  //   mongoose.connect('mongodb://localhost/mongoose_connect', function(){
-  //     clearTimeout(timer);
-  //     assert.ok(mongoose.connected, 'It should connect using uri / callback signature');
-  //     
-  //     mongoose.disconnect(function(){
-  //       assert.ok(!mongoose.connected);
-  //       
-  //       var timer = timeout(mongoose);
-  //       mongoose.connect('mongodb://localhost/mongoose_connect', { some: 'option' }, function(){
-  //         clearTimeout(timer);
-  //         assert.ok(mongoose.connected, 'It should connect using uri / options / callback signature');
-  //         mongoose.disconnect(function(){
-  //           assert.ok(!mongoose.connected);
-  //           done();
-  //         });
-  //       });
-  //     });
-  //   });
-  // },
-  
+   'test connecting to mongodb': function(assert, done){
+     var mongoose = require('mongoose').new(),
+         timer = timeout(mongoose);
+     mongoose.connect('mongodb://localhost/mongoose_connect', function(err){
+       clearTimeout(timer);
+       assert.ok(mongoose.connected, 'It should connect using uri / callback signature');
+       
+       mongoose.disconnect(function(){
+         assert.ok(!mongoose.connected);
+         
+         var timer = timeout(mongoose);
+         mongoose.connect('mongodb://localhost/mongoose_connect', { some: 'option' }, function(){
+           clearTimeout(timer);
+           assert.ok(mongoose.connected, 'It should connect using uri / options / callback signature');
+           mongoose.disconnect(function(){
+             assert.ok(!mongoose.connected);
+             done();
+           });
+         });
+       });
+     });
+   },
+ 
   'test connection path errors': function(){
       try{
         mongoose.connect('localhost/db');
@@ -79,8 +80,8 @@ module.exports = {
       assert.ok(typeof instance._run == 'function');
       assert.ok(typeof instance.save == 'function');
   },
-  
-  'test defining a model name that conflicts with an internal method': function(){
+   
+  'test defining a model name that conflicts with an internal method': function(assert, done){
     var document = mongoose.define,
         conflict = false;
     try {
@@ -89,6 +90,11 @@ module.exports = {
       if (/choose/.test(e.toString())) conflict = true;
     }
     assert.ok(conflict, 'There should be a name conflict');
+    done();
+  },
+ 
+  teardown: function(){
+    db.close();
   }
   
 };
