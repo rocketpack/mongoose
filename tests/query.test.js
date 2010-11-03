@@ -312,6 +312,39 @@ module.exports = {
     });
   },
   
+  'test save of partially selected doc': function(assert, done){
+    User
+      .find('name.first', 'Nathan')
+      .fields('name')
+      .all(function(err, docs){
+        assert.ok(!err);
+        assert.length(docs, 1);
+        assert.equal('Nathan', docs[0].name.first);
+        assert.equal('White', docs[0].name.last);
+        assert.isUndefined(docs[0].visits);
+        docs[0].name.first = 'Tobi';
+        docs[0].save(function(err){
+          assert.ok(!err);
+          User
+            .find({ name: { first: 'Tobi', last: 'White' }})
+            .all(function(err, docs){
+              assert.ok(!err);
+              assert.length(docs, 1);
+              assert.equal('nathan@learnboost.com', docs[0].contact.email);
+              assert.equal('555-555-5555', docs[0].contact.phone);
+              assert.eql(['admin'], docs[0].contact.roles);
+              assert.equal(25, docs[0].contact.visits);
+              assert.equal(33, docs[0].contact.age);
+              docs[0].name.first = 'Nathan';
+              docs[0].save(function(err){
+                assert.ok(!err);
+                done();
+              });
+            });
+        });
+      });
+  },
+  
   'test find() $gt': function(assert, done){
     User.find({ visits: { $gt: 10 }}).all(function(err, docs){
       assert.ok(!err);
