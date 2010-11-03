@@ -202,11 +202,12 @@ module.exports = {
   },
   
   'test find() partial select': function(assert, done){
-    User.find({ 'name.first': 'Nathan' }, { name: true }).all(function(err, docs){
+    User.find({ 'name.first': 'TJ' }, { age: true }).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 1);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.isUndefined(docs[0].age);
+      assert.isUndefined(docs[0].visits);
+      assert.isUndefined(docs[0].name);
+      assert.equal(23, docs[0].age);
       assert.eql({}, docs[0].contact);
       done();
     });
