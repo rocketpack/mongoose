@@ -214,11 +214,25 @@ module.exports = {
     });
   },
   
+  'test find() partial select with namespaced field': function(assert, done){
+    User.find({ 'name.first': 'Nathan' }, { 'name.first': true }).all(function(err, docs){
+      assert.ok(!err);
+      assert.length(docs, 1);
+      console.log(docs[0]);
+      assert.equal('Nathan', docs[0].name.first);
+      assert.isUndefined(docs[0].name.last);
+      assert.isUndefined(docs[0].age);
+      assert.eql({}, docs[0].contact);
+      done();
+    });
+  },
+  
   'test find() partial select with several fields': function(assert, done){
     User.find({ 'name.first': 'Nathan' }, { name: true, age: true }).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
+      assert.equal('White', docs[0].name.last);
       assert.equal(33, docs[0].age);
       assert.eql({}, docs[0].contact);
       done();
