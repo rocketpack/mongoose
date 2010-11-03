@@ -1,9 +1,10 @@
-var assert = require('assert');
-var subclass = require('mongoose').util.subclass;
+
+var util = require('mongoose').util
+  , subclass = util.subclass;
 
 module.exports = {
   
-  'test subclass of Native constructors': function(){
+  'test subclass of Native constructors': function(assert){
     var EmbeddedArray = subclass(Array, {
       test: function(){}
     }) 
@@ -16,6 +17,9 @@ module.exports = {
     assert.ok(typeof ea.test == 'function');
     assert.ok(typeof arr.test == 'undefined');
     assert.ok(Object.prototype.toString.call(ea) == '[object Array]');
-  }
+  },
   
+  teardown: function(){
+    require('./common').db.close();
+  }
 };

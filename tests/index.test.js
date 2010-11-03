@@ -9,10 +9,6 @@ var assert = require('assert')
   , db = require('./common').db;
 
 module.exports = {
-  before: function(assert, done){
-    db.onConnect(done);
-  },
-
   'test connection path errors': function(){
       try{
         mongoose.connect('localhost/db');
@@ -69,9 +65,5 @@ module.exports = {
       if (/choose/.test(e.toString())) conflict = true;
     }
     assert.ok(conflict, 'There should be a name conflict');
-  },
-  
-  teardown: function(){
-    db.close();
   }
 };

@@ -6,7 +6,7 @@ var assert = require('assert')
 
 module.exports = {
   before: function(assert, done){
-    db.onConnect(done);
+    db.on('connect', done);
   },
 
   'test hydration': function(){
@@ -657,10 +657,6 @@ module.exports = {
         done();
       });
     });
-  },
-  
-  teardown: function(){
-    db.close();
   }
 
 };
