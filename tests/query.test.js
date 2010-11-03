@@ -1,7 +1,7 @@
 var assert = require('assert')
   , mongoose = require('mongoose').new()
   , document = mongoose.define
-  , db = mongoose.connect('mongodb://localhost/mongoose_integration_query');
+  , db = require('./common').db;
 
 document('User')
   .oid('_id')
@@ -48,6 +48,7 @@ module.exports = {
       },
       roles: ['admin'],
       blocked: true,
+      age: 23,
       visits: 20
     });
     
@@ -95,6 +96,17 @@ module.exports = {
     });
   },
   
+  'test forEach()': function(assert, done){
+    var docs = [];
+    User.find().forEach(function(doc){
+      docs.push(docs);
+    }).done(function(err){
+      assert.ok(!err);
+      assert.length(docs, 4);
+      done();
+    });
+  },
+  
   'test first()': function(assert, done){
     User.first().all(function(err, docs){
       assert.ok(!err);
@@ -107,7 +119,7 @@ module.exports = {
     User.first(2).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal(1, docs[1].age);
+      assert.equal(23, docs[1].age);
       done();
     });
   },
@@ -191,12 +203,25 @@ module.exports = {
   },
   
   'test find() partial select': function(assert, done){
-    User.find({ 'name.first': 'Nathan' }, { name: true }).all(function(err, docs){
+    User.find({ 'name.first': 'TJ' }, { age: true }).all(function(err, docs){
+      assert.ok(!err);
+      assert.length(docs, 1);
+      assert.isUndefined(docs[0].visits);
+      assert.equal(23, docs[0].age);
+      assert.eql({}, docs[0].name);
+      assert.eql({}, docs[0].contact);
+      done();
+    });
+  },
+  
+  'test find() partial select with namespaced field': function(assert, done){
+    User.find({ 'name.first': 'Nathan' }, { 'name.first': true }).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
-      //assert.isUndefined(docs[0].age);
-      //assert.eql({}, docs[0].contact);
+      assert.isUndefined(docs[0].name.last);
+      assert.isUndefined(docs[0].age);
+      assert.eql({}, docs[0].contact);
       done();
     });
   },
@@ -206,6 +231,7 @@ module.exports = {
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
+      assert.equal('White', docs[0].name.last);
       assert.equal(33, docs[0].age);
       assert.eql({}, docs[0].contact);
       done();
@@ -281,8 +307,8 @@ module.exports = {
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
-      //assert.isUndefined(docs[0].age);
-      //assert.eql({}, docs[0].contact);
+      assert.isUndefined(docs[0].age);
+      assert.eql({}, docs[0].contact);
       done();
     });
   },
@@ -570,9 +596,5 @@ module.exports = {
       assert.ok(!docs);
       done();
     });
-  },
-
-  teardown: function(){
-    db.close();
   }
 };
