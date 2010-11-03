@@ -190,16 +190,16 @@ module.exports = {
     });
   },
   
-  // 'test find() partial select': function(assert, done){
-  //   User.find({ 'name.first': 'Nathan' }, { name: true }).all(function(err, docs){
-  //     assert.ok(!err);
-  //     assert.length(docs, 1);
-  //     assert.equal('Nathan', docs[0].name.first);
-  //     assert.isUndefined(docs[0].age);
-  //     assert.eql({}, docs[0].contact);
-  //     done();
-  //   });
-  // },
+  'test find() partial select': function(assert, done){
+    User.find({ 'name.first': 'Nathan' }, { name: true }).all(function(err, docs){
+      assert.ok(!err);
+      assert.length(docs, 1);
+      assert.equal('Nathan', docs[0].name.first);
+      assert.isUndefined(docs[0].age);
+      assert.eql({}, docs[0].contact);
+      done();
+    });
+  },
   
   'test find() partial select with several fields': function(assert, done){
     User.find({ 'name.first': 'Nathan' }, { name: true, age: true }).all(function(err, docs){
@@ -276,16 +276,16 @@ module.exports = {
     });
   },
   
-  // 'test find() partial select field omission': function(assert, done){
-  //   User.find({ 'name.first': 'Nathan' }, 'name').all(function(err, docs){
-  //     assert.ok(!err);
-  //     assert.length(docs, 1);
-  //     assert.equal('Nathan', docs[0].name.first);
-  //     assert.isUndefined(docs[0].age);
-  //     assert.eql({}, docs[0].contact);
-  //     done();
-  //   });
-  // },
+  'test find() partial select field omission': function(assert, done){
+    User.find({ 'name.first': 'Nathan' }, 'name').all(function(err, docs){
+      assert.ok(!err);
+      assert.length(docs, 1);
+      assert.equal('Nathan', docs[0].name.first);
+      assert.isUndefined(docs[0].age);
+      assert.eql({}, docs[0].contact);
+      done();
+    });
+  },
   
   'test find() $gt': function(assert, done){
     User.find({ visits: { $gt: 10 }}).all(function(err, docs){
