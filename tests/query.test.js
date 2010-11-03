@@ -1,7 +1,7 @@
 var assert = require('assert')
   , mongoose = require('mongoose').new()
   , document = mongoose.define
-  , db = require('./common').db;
+  , db = mongoose.connect('mongodb://localhost/mongoose_test');
 
 document('User')
   .oid('_id')
@@ -20,12 +20,11 @@ document('User')
   .array('roles');
   
 var User = mongoose.User;
-
 module.exports = {
   before: function(assert, done){
     User.drop(done);
   },
-
+  
   'test simple document insertion': function(assert, done){
     var nathan = new User({
       name: {
@@ -596,5 +595,9 @@ module.exports = {
       assert.ok(!docs);
       done();
     });
+  },
+  
+  teardown: function(){
+    mongoose.disconnect();
   }
 };

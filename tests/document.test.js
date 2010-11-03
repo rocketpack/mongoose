@@ -1,12 +1,7 @@
-
 var assert = require('assert')
   , mongoose = require('mongoose').new()
   , document = mongoose.define
-  , db = require('./common').db;
-
-//console.log(mongoose)
-//var x = mongoose.new();
-//console.log(x);
+  , db = mongoose.connect('mongodb://localhost/mongoose_tests');
 
 module.exports = {
   before: function(assert, done){
@@ -661,6 +656,10 @@ module.exports = {
         done();
       });
     });
+  },
+  
+  teardown: function(){
+    mongoose.disconnect();
   }
 
 };
