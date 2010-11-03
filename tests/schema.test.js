@@ -2,7 +2,7 @@ var assert = require('assert')
   , mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , TypeSchema = mongoose.TypeSchema;
-  
+
 module.exports = {
   
   'test simple chaining': function(){

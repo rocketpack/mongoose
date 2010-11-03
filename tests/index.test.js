@@ -1,38 +1,14 @@
+
+/**
+ * Module dependencies.
+ */
+
 var assert = require('assert')
   , mongoose = require('mongoose')
-  , Document = mongoose.Document;
-
-function timeout(goose){
-  return setTimeout(function(){
-    assert.ok(false, 'Connection timeout');
-  },5000);
-}
+  , Document = mongoose.Document
+  , db = require('./common').db;
 
 module.exports = {
-
-  // 'test connecting to mongodb': function(assert, done){
-  //   var mongoose = require('mongoose'),
-  //       timer = timeout(mongoose);
-  //   mongoose.connect('mongodb://localhost/mongoose_connect', function(){
-  //     clearTimeout(timer);
-  //     assert.ok(mongoose.connected, 'It should connect using uri / callback signature');
-  //     
-  //     mongoose.disconnect(function(){
-  //       assert.ok(!mongoose.connected);
-  //       
-  //       var timer = timeout(mongoose);
-  //       mongoose.connect('mongodb://localhost/mongoose_connect', { some: 'option' }, function(){
-  //         clearTimeout(timer);
-  //         assert.ok(mongoose.connected, 'It should connect using uri / options / callback signature');
-  //         mongoose.disconnect(function(){
-  //           assert.ok(!mongoose.connected);
-  //           done();
-  //         });
-  //       });
-  //     });
-  //   });
-  // },
-  
   'test connection path errors': function(){
       try{
         mongoose.connect('localhost/db');
@@ -49,7 +25,7 @@ module.exports = {
       try{
         mongoose.connect('mongodb://localhost/')
       } catch(e){
-        assert.ok(/provide a database/.test(e.message));       
+        assert.ok(/provide a database/.test(e.message));
       }
   },
   
@@ -90,5 +66,4 @@ module.exports = {
     }
     assert.ok(conflict, 'There should be a name conflict');
   }
-  
 };

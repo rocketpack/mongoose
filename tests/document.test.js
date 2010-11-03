@@ -2,10 +2,13 @@
 var assert = require('assert')
   , mongoose = require('mongoose')
   , document = mongoose.define
-  , db = mongoose.connect('mongodb://localhost/mongoose_document_tests');
+  , db = require('./common').db;
 
 module.exports = {
-    
+  before: function(assert, done){
+    db.on('connect', done);
+  },
+
   'test hydration': function(){
     var document = mongoose.define;
     document('SimpleUser')
@@ -654,10 +657,6 @@ module.exports = {
         done();
       });
     });
-  },
-  
-  teardown: function(){
-    db.close();
   }
 
 };

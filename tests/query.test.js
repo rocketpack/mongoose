@@ -1,7 +1,7 @@
 var assert = require('assert')
   , mongoose = require('mongoose')
   , document = mongoose.define
-  , db = mongoose.connect('mongodb://localhost/mongoose_integration_query');
+  , db = require('./common').db;
 
 document('User')
   .oid('_id')
@@ -570,9 +570,5 @@ module.exports = {
       assert.ok(!docs);
       done();
     });
-  },
-
-  teardown: function(){
-    db.close();
   }
 };
