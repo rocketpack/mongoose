@@ -330,11 +330,13 @@ module.exports = {
             .all(function(err, docs){
               assert.ok(!err);
               assert.length(docs, 1);
-              assert.equal('nathan@learnboost.com', docs[0].contact.email);
-              assert.equal('555-555-5555', docs[0].contact.phone);
-              assert.eql(['admin'], docs[0].contact.roles);
-              assert.equal(25, docs[0].contact.visits);
-              assert.equal(33, docs[0].contact.age);
+              assert.equal('Tobi', docs[0].name.first);
+              assert.equal('White', docs[0].name.last);
+              docs[0].contact.email = 'nathan@learnboost.com';
+              docs[0].contact.phone = '555-555-5555';
+              docs[0].visits = 25;
+              docs[0].age = 33;
+              docs[0].roles = ['admin'];
               docs[0].name.first = 'Nathan';
               docs[0].save(function(err){
                 assert.ok(!err);
