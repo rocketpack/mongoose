@@ -1,7 +1,8 @@
 var assert = require('assert')
-  , mongoose = require('mongoose').new()
+  , mongoose = require('mongoose')
   , TypeSchema = mongoose.TypeSchema
-  , type = mongoose.type;
+  , instance = mongoose.new()
+  , type = instance.type;
 
 module.exports = {
   
@@ -10,13 +11,13 @@ module.exports = {
         
     assert.ok(typeof type == 'function');
     
-    assert.ok(mongoose._types['string']);
-    assert.ok(mongoose._types['number']);
-    assert.ok(mongoose._types['oid']);
-    assert.ok(mongoose._types['object']);
-    assert.ok(mongoose._types['array']);
-    assert.ok(mongoose._types['boolean']);
-    assert.ok(mongoose._types['date']);
+    assert.ok(instance._types['string']);
+    assert.ok(instance._types['number']);
+    assert.ok(instance._types['oid']);
+    assert.ok(instance._types['object']);
+    assert.ok(instance._types['array']);
+    assert.ok(instance._types['boolean']);
+    assert.ok(instance._types['date']);
     
   },
   

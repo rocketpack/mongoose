@@ -1,7 +1,8 @@
 var assert = require('assert')
-  , mongoose = require('mongoose').new()
+  , mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , TypeSchema = mongoose.TypeSchema;
+  , TypeSchema = mongoose.TypeSchema
+  , mongoose = mongoose.new()
 
 module.exports = {
   
