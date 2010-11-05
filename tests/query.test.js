@@ -1,7 +1,7 @@
 var assert = require('assert')
-  , mongoose = require('../')
+  , mongoose = require('mongoose').new()
   , document = mongoose.define
-  , db = mongoose.connect('mongodb://localhost/mongoose_integration_query');
+  , db = mongoose.connect('mongodb://localhost/mongoose_test');
 
 document('User')
   .oid('_id')
@@ -20,12 +20,11 @@ document('User')
   .array('roles');
   
 var User = mongoose.User;
-
 module.exports = {
   before: function(assert, done){
     User.drop(done);
   },
-
+  
   'test simple document insertion': function(assert, done){
     var nathan = new User({
       name: {
@@ -48,6 +47,7 @@ module.exports = {
       },
       roles: ['admin'],
       blocked: true,
+      age: 23,
       visits: 20
     });
     
@@ -71,14 +71,14 @@ module.exports = {
       visits: 5
     });
       
-    nathan.save(function(errors){
-      assert.ok(!errors);
+    nathan.save(function(errors, doc){
+//      assert.ok(!errors);
       tj.save(function(errors){
-        assert.ok(!errors);
+//        assert.ok(!errors);
         tobi.save(function(errors){
-          assert.ok(!errors);
+  //        assert.ok(!errors);
           raul.save(function(errors){
-            assert.ok(!errors);
+    //        assert.ok(!errors);
             done();
           })
         });
@@ -89,6 +89,17 @@ module.exports = {
   
   'test all()': function(assert, done){
     User.all(function(err, docs){
+      assert.ok(!err);
+      assert.length(docs, 4);
+      done();
+    });
+  },
+  
+  'test forEach()': function(assert, done){
+    var docs = [];
+    User.find().forEach(function(doc){
+      docs.push(docs);
+    }).done(function(err){
       assert.ok(!err);
       assert.length(docs, 4);
       done();
@@ -107,7 +118,7 @@ module.exports = {
     User.first(2).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal(1, docs[1].age);
+      assert.equal(23, docs[1].age);
       done();
     });
   },
@@ -191,12 +202,25 @@ module.exports = {
   },
   
   'test find() partial select': function(assert, done){
-    User.find({ 'name.first': 'Nathan' }, { name: true }).all(function(err, docs){
+    User.find({ 'name.first': 'TJ' }, { age: true }).all(function(err, docs){
+      assert.ok(!err);
+      assert.length(docs, 1);
+      assert.isUndefined(docs[0].visits);
+      assert.equal(23, docs[0].age);
+      assert.eql({}, docs[0].name);
+      assert.eql({}, docs[0].contact);
+      done();
+    });
+  },
+  
+  'test find() partial select with namespaced field': function(assert, done){
+    User.find({ 'name.first': 'Nathan' }, { 'name.first': true }).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
-      //assert.isUndefined(docs[0].age);
-      //assert.eql({}, docs[0].contact);
+      assert.isUndefined(docs[0].name.last);
+      assert.isUndefined(docs[0].age);
+      assert.eql({}, docs[0].contact);
       done();
     });
   },
@@ -206,6 +230,7 @@ module.exports = {
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
+      assert.equal('White', docs[0].name.last);
       assert.equal(33, docs[0].age);
       assert.eql({}, docs[0].contact);
       done();
@@ -281,10 +306,45 @@ module.exports = {
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
-      //assert.isUndefined(docs[0].age);
-      //assert.eql({}, docs[0].contact);
+      assert.isUndefined(docs[0].age);
+      assert.eql({}, docs[0].contact);
       done();
     });
+  },
+  
+  'test save of partially selected doc': function(assert, done){
+    User
+      .find('name.first', 'Nathan')
+      .fields('name')
+      .all(function(err, docs){
+        assert.ok(!err);
+        assert.length(docs, 1);
+        assert.equal('Nathan', docs[0].name.first);
+        assert.equal('White', docs[0].name.last);
+        assert.isUndefined(docs[0].visits);
+        docs[0].name.first = 'Tobi';
+        docs[0].save(function(err){
+          assert.ok(!err);
+          User
+            .find({ name: { first: 'Tobi', last: 'White' }})
+            .all(function(err, docs){
+              assert.ok(!err);
+              assert.length(docs, 1);
+              assert.equal('Tobi', docs[0].name.first);
+              assert.equal('White', docs[0].name.last);
+              docs[0].contact.email = 'nathan@learnboost.com';
+              docs[0].contact.phone = '555-555-5555';
+              docs[0].visits = 25;
+              docs[0].age = 33;
+              docs[0].roles = ['admin'];
+              docs[0].name.first = 'Nathan';
+              docs[0].save(function(err){
+                assert.ok(!err);
+                done();
+              });
+            });
+        });
+      });
   },
   
   'test find() $gt': function(assert, done){
@@ -571,8 +631,8 @@ module.exports = {
       done();
     });
   },
-
+  
   teardown: function(){
-    db.close();
+    mongoose.disconnect();
   }
 };

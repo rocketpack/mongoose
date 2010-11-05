@@ -1,8 +1,9 @@
 var assert = require('assert')
   , mongoose = require('../')
   , Schema = mongoose.Schema
-  , TypeSchema = mongoose.TypeSchema;
-  
+  , TypeSchema = mongoose.TypeSchema
+  , mongoose = mongoose.new()
+
 module.exports = {
   
   'test simple chaining': function(){

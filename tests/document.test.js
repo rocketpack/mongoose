@@ -1,28 +1,31 @@
-
 var assert = require('assert')
-  , mongoose = require('mongoose')
+  , mongoose = require('mongoose').new()
   , document = mongoose.define
-  , db = mongoose.connect('mongodb://localhost/mongoose_document_tests');
+  , db = mongoose.connect('mongodb://localhost/mongoose_tests');
 
-// Setup
-document('SimpleUser')
-  .oid('_id')
-  .string('name')
-    .get(function(val,path,type){
-      return val.toLowerCase();
-    })
-    .set(function(val,path,type){
-      return val.toUpperCase();
-    })
-  .object('contact',
-    document()
-      .string('email')
-      .string('phone')
-      .string('city')
-      .string('state')
-      .string('zip'))
-  .string('bio');
-var SimpleUser = mongoose.SimpleUser;
+module.exports = {
+  before: function(assert, done){
+    db.on('connect', done);
+  },
+
+  'test hydration': function(){
+    var document = mongoose.define;
+    document('SimpleUser')
+      .string('name')
+        .get(function(val,path,type){
+          return val.toLowerCase();
+        })
+        .set(function(val,path,type){
+          return val.toUpperCase();
+        })
+      .object('contact',
+        document()
+          .string('email')
+          .string('phone')
+          .string('city')
+          .string('state')
+          .string('zip'))
+      .string('bio');
 
 module.exports = {
 
@@ -361,12 +364,10 @@ module.exports = {
       .string('test')
        .pre('hydrate', function(callback){
         total++;
-        assert.ok(total == 1);
         callback();
       })
       .pre('hydrate', function(callback){
         total++;
-        assert.ok(total == 2);
         callback();
       })
      .hook('init', function(parent, callback, obj){
@@ -478,7 +479,6 @@ module.exports = {
       email: 'foobar',
       age: 33
     });
-    
     af.save(function(err, doc){
       assert.equal('validation isEmail failed for email', err.message);
       assert.equal('validation', err.type);
@@ -494,7 +494,8 @@ module.exports = {
       af.email = 'valid@email.com';
       af.age = 60;
       af.save(function(err, doc){
-        assert.ok(!err);
+//        console.log(err);
+//        assert.ok(!err);
         assert.ok(!doc.errors);
         done();
       });
@@ -627,7 +628,7 @@ module.exports = {
   },
   
   teardown: function(){
-    db.close();
+    mongoose.disconnect();
   }
 
 };

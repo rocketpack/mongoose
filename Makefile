@@ -1,19 +1,10 @@
 
 EXPRESSO = support/expresso/bin/expresso -I lib --serial
 
-TESTS =	tests/dbreffedArray.js \
-				tests/indexing.js \
-				tests/dbref.js \
-				tests/dbrefArray.js \
-				tests/document.js \
-				tests/index.js \
-				tests/schema.js \
-				tests/types.js \
-				tests/util.js
+TESTS = tests/*.test.js
 
 test:
-	@$(EXPRESSO) $(TESTS) $(TEST_FLAGS) \
-		&& $(EXPRESSO) $(TEST_FLAGS) tests/query.js
+	@$(EXPRESSO) $(TESTS) $(TEST_FLAGS)
 
 test-cov:
 	@$(MAKE) TEST_FLAGS=--cov test
