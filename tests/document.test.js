@@ -424,7 +424,6 @@ module.exports = {
         test: [1,2,3]
       });
       
-      console.log(af);
       assert.ok(af.test.length == 3);
       assert.ok(af.test.get(1) == 2);
       af.test.set(1,5);
