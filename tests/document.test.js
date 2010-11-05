@@ -3,8 +3,6 @@ var assert = require('assert')
   , document = mongoose.define
   , db = mongoose.connect('mongodb://localhost/mongoose_tests');
 
-var SimpleUser;
-
 module.exports = {
   before: function(assert, done){
     db.on('connect', done);
@@ -29,47 +27,67 @@ module.exports = {
           .string('zip'))
       .string('bio');
 
-    SimpleUser = mongoose.SimpleUser;
+       var SimpleUser = mongoose.SimpleUser;
 
-     var instance = new SimpleUser({
-       name: 'nathan',
-       contact: {
-         city: 'SF',
-         state: 'CA'
-       }
-     },true);
+       var instance = new SimpleUser({
+         name: 'nathan',
+         contact: {
+           city: 'SF',
+           state: 'CA'
+         }
+       },true);
 
-     assert.ok(instance.hydrated('name'));
-     assert.ok(instance.hydrated('contact.city'));
-     assert.ok(instance.hydrated('bio') == false);
-     
-     assert.ok(instance.get('name') == 'nathan');
+       assert.ok(instance.hydrated('name'));
+       assert.ok(instance.hydrated('contact.city'));
+       assert.ok(instance.hydrated('bio') == false);
+       
+       assert.ok(instance.get('name') == 'nathan');
 
-     assert.ok(instance._schema['name'].getters.length == 1);
-     assert.ok(instance._schema['name'].setters.length == 2);     
+       assert.ok(instance._schema['name'].getters.length == 1);
+       assert.ok(instance._schema['name'].setters.length == 2);     
   },
   
   'test mixin': function(){
-     var instance = new SimpleUser({
-       name: 'Nathan',
-       contact: {
-         city: 'SF',
-         state: 'CA'
-       }
-     });
+    var document = mongoose.define;
+    document('SimpleUser')
+      .string('name')
+        .get(function(val,path,type){
+          return val.toLowerCase();
+        })
+        .set(function(val,path,type){
+          return val.toUpperCase();
+        })
+      .object('contact',
+        document()
+          .string('email')
+          .string('phone')
+          .string('city')
+          .string('state')
+          .string('zip'))
+      .string('bio');
 
-     assert.ok(instance.hydrated('name') == false);
-     assert.ok(instance.hydrated('contact.city') == false);
-     assert.ok(instance.hydrated('bio') == false);
-     
-     assert.ok(instance._.dirty['name'] == true);
-     assert.ok(instance._.dirty['contact.state'] == true);
+       var SimpleUser = mongoose.SimpleUser;
 
-     assert.ok(instance._.doc.name == 'NATHAN');
-     assert.ok(instance.get('name') == 'nathan');
+       var instance = new SimpleUser({
+         name: 'Nathan',
+         contact: {
+           city: 'SF',
+           state: 'CA'
+         }
+       });
 
-     assert.ok(instance._schema['name'].getters.length == 1);
-     assert.ok(instance._schema['name'].setters.length == 2);     
+       assert.ok(instance.hydrated('name') == false);
+       assert.ok(instance.hydrated('contact.city') == false);
+       assert.ok(instance.hydrated('bio') == false);
+       
+       assert.ok(instance._.dirty['name'] == true);
+       assert.ok(instance._.dirty['contact.state'] == true);
+
+       assert.ok(instance._.doc.name == 'NATHAN');
+       assert.ok(instance.get('name') == 'nathan');
+
+       assert.ok(instance._schema['name'].getters.length == 1);
+       assert.ok(instance._schema['name'].setters.length == 2);     
   },
   
   'test setup functions': function(){
@@ -101,6 +119,8 @@ module.exports = {
   },
   
   'test isNew flag': function(){
+    var SimpleUser = mongoose.SimpleUser;
+    
     var user = new SimpleUser({name: 'Nate'}); 
     assert.ok(user.isNew == true);
     
@@ -109,7 +129,9 @@ module.exports = {
   },
   
   'test hydrated()': function(){
-    var user = new SimpleUser({
+    var User = mongoose.SimpleUser;
+    
+    var user = new User({
       name: 'Nathan',
       contact: {
         city: 'SF'
@@ -120,7 +142,7 @@ module.exports = {
     assert.ok(user.hydrated('contact.city') == true);
     assert.ok(user.hydrated('contact.state') == false);
     
-    var user = new SimpleUser({
+    var user = new User({
       name: 'Nathan',
       contact: {
         city: 'SF'
@@ -133,7 +155,9 @@ module.exports = {
   },
 
   'test isDirty()': function(){
-    var user = new SimpleUser({
+    var User = mongoose.SimpleUser;
+    
+    var user = new User({
       name: 'Nathan',
       contact: {
         city: 'SF'
@@ -144,7 +168,7 @@ module.exports = {
     assert.ok(user.isDirty('contact.city') == false);
     assert.ok(user.isDirty('contact.state') == false);
     
-    var user = new SimpleUser({
+    var user = new User({
       name: 'Nathan',
       contact: {
         city: 'SF'
@@ -157,7 +181,9 @@ module.exports = {
   },
   
   'test interal doc value when initialized': function(){
-    var user = new SimpleUser({
+    var User = mongoose.SimpleUser;
+    
+    var user = new User({
       name: 'Nathan',
       contact: {
         city: 'SF'
@@ -168,7 +194,7 @@ module.exports = {
     assert.ok(user._.doc.contact.city == 'SF');
     assert.ok(user._.doc.contact.state == undefined);
     
-    var user = new SimpleUser({
+    var user = new User({
       name: 'Nathan',
       contact: {
         city: 'SF'
@@ -181,7 +207,9 @@ module.exports = {
   },
   
   'test getters/setters': function(){
-    var user = new SimpleUser();
+    var User = mongoose.SimpleUser;
+    
+    var user = new User();
     user.set('name', 'Nathan');
     user.set('contact.city', 'SF');
     
@@ -195,7 +223,9 @@ module.exports = {
   },
   
   'test dot notation getters/setters': function(){
-    var user = new SimpleUser();
+    var User = mongoose.SimpleUser;
+    
+    var user = new User();
     user.name = 'Nathan';
     user.contact.city = 'SF';
     
@@ -305,7 +335,7 @@ module.exports = {
     var total = 0;
     document('PreHooks')
       .string('test')
-      .pre('hydrate', function(callback){
+       .pre('hydrate', function(callback){
         total++;
         callback();
       })
@@ -424,7 +454,6 @@ module.exports = {
         test: [1,2,3]
       });
       
-      console.log(af);
       assert.ok(af.test.length == 3);
       assert.ok(af.test.get(1) == 2);
       af.test.set(1,5);
