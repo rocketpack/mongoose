@@ -82,6 +82,7 @@ module.exports = {
     assert.ok(conflict, 'There should be a name conflict');
     done();
   },
+ 
   'test disconnecting from mongodb': function (assert, done) {
     mongoose.disconnect(function(){
       assert.ok(!mongoose.connected);
@@ -104,4 +105,5 @@ module.exports = {
       done();
     });
   }
+  
 };
