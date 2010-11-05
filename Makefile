@@ -1,13 +1,7 @@
 
 EXPRESSO = support/expresso/bin/expresso -I lib --serial
 
-TESTS = tests/document.test.js \
-				tests/indexing.test.js \
-				tests/index.test.js \
-				tests/query.test.js \
-				tests/schema.test.js \
-				tests/types.test.js \
-				tests/util.test.js
+TESTS = tests/*.test.js
 
 test:
 	@$(EXPRESSO) $(TESTS) $(TEST_FLAGS)
