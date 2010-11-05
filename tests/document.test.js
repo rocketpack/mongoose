@@ -3,6 +3,8 @@ var assert = require('assert')
   , document = mongoose.define
   , db = mongoose.connect('mongodb://localhost/mongoose_tests');
 
+var SimpleUser;
+
 module.exports = {
   before: function(assert, done){
     db.on('connect', done);
@@ -27,9 +29,8 @@ module.exports = {
           .string('zip'))
       .string('bio');
 
-module.exports = {
+    SimpleUser = mongoose.SimpleUser;
 
-  'test hydration': function(){
      var instance = new SimpleUser({
        name: 'nathan',
        contact: {
@@ -189,7 +190,7 @@ module.exports = {
     assert.ok(user.get('contact.city') == 'SF');
     assert.ok(user.isDirty('name') == true);
     assert.ok(user.isDirty('contact.city') == true);
-    assert.ok(Object.keys(user._.doc).length == 3);
+    assert.ok(Object.keys(user._.doc).length == 2);
     assert.ok(Object.keys(user._.doc.contact).length == 1);
   },
   
@@ -203,7 +204,7 @@ module.exports = {
     assert.ok(user.contact.city == 'SF');
     assert.ok(user.isDirty('name') == true);
     assert.ok(user.isDirty('contact.city') == true);
-    assert.ok(Object.keys(user._.doc).length == 3);
+    assert.ok(Object.keys(user._.doc).length == 2);
     assert.ok(Object.keys(user._.doc.contact).length == 1);
   },
   
@@ -423,6 +424,7 @@ module.exports = {
         test: [1,2,3]
       });
       
+      console.log(af);
       assert.ok(af.test.length == 3);
       assert.ok(af.test.get(1) == 2);
       af.test.set(1,5);
