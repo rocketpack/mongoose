@@ -1,7 +1,6 @@
 var assert = require('assert')
   , mongoose = require('mongoose').new()
-  , Document = mongoose.Document
-  , db = mongoose.connect('mongodb://localhost/mongoose_tests');
+  , Document = mongoose.Document;
   
 function timeout(goose){
   return setTimeout(function(){
@@ -13,28 +12,14 @@ function timeout(goose){
 module.exports = {
 
   'test connecting to mongodb': function(assert, done){
-    var mongoose = require('mongoose').new(),
-        timer = timeout(mongoose);
+    var timer = timeout(mongoose);
     mongoose.connect('mongodb://localhost/mongoose_connect', function(err){
       clearTimeout(timer);
       assert.ok(mongoose.connected, 'It should connect using uri / callback signature');
-      
-      mongoose.disconnect(function(){
-        assert.ok(!mongoose.connected);
-        
-        var timer = timeout(mongoose);
-        mongoose.connect('mongodb://localhost/mongoose_connect', { some: 'option' }, function(){
-          clearTimeout(timer);
-          assert.ok(mongoose.connected, 'It should connect using uri / options / callback signature');
-          mongoose.disconnect(function(){
-            assert.ok(!mongoose.connected);
-            done();
-          });
-        });
-      });
+      done();
     });
   },
- 
+
   'test connection path errors': function(assert, done){
       try{
         mongoose.connect('localhost/db');
@@ -97,9 +82,26 @@ module.exports = {
     assert.ok(conflict, 'There should be a name conflict');
     done();
   },
-  
-  teardown: function(){
-    mongoose.disconnect();
+  'test disconnecting from mongodb': function (assert, done) {
+    mongoose.disconnect(function(){
+      assert.ok(!mongoose.connected);
+      done();
+    });
+  },
+
+  'test reconnecting from mongodb': function (assert, done) {
+    var timer = timeout(mongoose);
+    mongoose.connect('mongodb://localhost/mongoose_connect', { some: 'option' }, function(){
+      clearTimeout(timer);
+      assert.ok(mongoose.connected, 'It should connect using uri / options / callback signature');
+      done();
+    });
+  },
+
+  'test disconnecting after reconnecting': function (assert, done) {
+    mongoose.disconnect(function(){
+      assert.ok(!mongoose.connected);
+      done();
+    });
   }
-  
 };
