@@ -293,6 +293,18 @@ module.exports = {
     assert.ok(virtual.nested.test == 'White Nathan');
   },
   
+  'test defaults that are not defined in subselect' : function(assert, done){
+    mongoose.define('Religion')
+      .string('name')
+      .number('gods').default(1);  
+    var Religion = mongoose.Religion;
+    var random = new Religion({name: 'random'}, false, ['name']);
+    assert.ok(random.gods === undefined);
+    var random = new Religion({name: 'random'});
+    assert.ok(random.gods === 1); 
+    done();
+  },
+  
   'test custom methods': function(){
     var document = mongoose.define;
     document('CustomHelpers')
