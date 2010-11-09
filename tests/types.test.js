@@ -55,10 +55,11 @@ module.exports = {
   
   'test array type definition': function(){
     var arr = type('array')
-      , set = arr.setters[1];
+      , set = arr.setters[0];
 
     assert.equal('array', arr.type);
-    assert.length(arr.setters, 2);
+    assert.equal('function', typeof arr._init);
+    assert.length(arr.setters, 1);
     assert.eql([1], set(1));
     assert.eql([1,2], set([1,2]));
     assert.ok(arr instanceof TypeSchema);
@@ -68,7 +69,7 @@ module.exports = {
     var arr = type('array').strict()
       , set = arr.strictSetters[0];
 
-    assert.length(arr.setters, 2);
+    assert.length(arr.setters, 1);
     assert.equal(Error, set(1));
     assert.eql([1,2], set([1,2]));
     assert.ok(arr instanceof TypeSchema);
