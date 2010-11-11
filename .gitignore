@@ -2,3 +2,4 @@ lib-cov
 .pomo
 examples/*.html
 examples/*.md
+**.swp
