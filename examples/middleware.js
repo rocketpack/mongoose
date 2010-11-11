@@ -23,30 +23,92 @@
    .number('age')
    .bool('blocked')
  
-   .hook('custom', function(fn){
-     console.log('custom hook');
+   .hook('serialFlow', function(fn){
+     console.log('serialFlow hook');
      if(fn) fn();
    })
-   .hook('custom', function(parent,callback){ // arguments are the same as 'hook' except parent has been prepended.
-     console.log('overriding custom hook');
+   .hook('serialFlow', function(parent,callback){ // arguments are the same as 'hook' except parent has been prepended.
+     console.log('overriding serialFlow hook');
      parent(callback); // 
      //callback(); // if you want to skip default hook action.
    })
-   .pre('custom', function(next,done){
-     console.log('pre hook for custom');
+   .pre('serialFlow', function(next,done){
+     console.log('... pre hook for serialFlow');
+     setTimeout(function(){
+       console.log('... pre hook for serialFlow (done) ...');
+       next();
+     }, 500);
+   })
+   .pre('serialFlow', function(next, done){
+     console.log('... another pre hook for serialFlow')
+     setTimeout(function(){
+       console.log('... another pre hook for serialFlow (done) ...');
+       next();
+     }, 500);
+   })
+
+   .hook('parallelFlow', function(fn){
+     console.log('parallelFlow hook');
+     if(fn) fn();
+   })
+   .hook('parallelFlow', function(parent,callback){ // arguments are the same as 'hook' except parent has been prepended.
+     console.log('overriding parallelFlow hook');
+     parent(callback); // 
+     //callback(); // if you want to skip default hook action.
+   })
+   .pre('parallelFlow', function(next,done){
+     console.log('... pre hook for parallelFlow');
+     setTimeout(function(){
+       console.log('... pre hook for parallelFlow (done) ...');
+     }, 500);
      next();
    })
-   .pre('custom', function(next, done){
-     console.log('another pre hook for custom');
+   .pre('parallelFlow', function(next, done){
+     console.log('... another pre hook for parallelFlow')
+     setTimeout(function(){
+       console.log('... another pre hook for parallelFlow (done) ...');
+     }, 500);
      next();
-   });
+   })
+
 
 
  var User = mongoose.User;
 
  var tobi = new User({ name: { first: 'Tobi', last: 'ferret' }, age: 1 });
  
-    tobi.custom(function(){
-      console.log('callback');
-      mongoose.disconnect();
+    console.log('==== calling serialFlow hook ====');
+    tobi.serialFlow(function(){
+      console.log('callback for serialFlow');
+      console.log('');
+      
+      console.log('==== calling parallelFlow hook ====');
+      tobi.parallelFlow(function(){
+        console.log('callback for parallelFlow');
+        mongoose.disconnect();
+      });
+
     });
+    
+/*
+Expected output:
+
+==== calling serialFlow hook ====
+... pre hook for serialFlow
+... pre hook for serialFlow (done) ...
+... another pre hook for serialFlow
+... another pre hook for serialFlow (done) ...
+overriding serialFlow hook
+serialFlow hook
+callback for serialFlow
+
+==== calling parallelFlow hook ====
+... pre hook for parallelFlow
+... another pre hook for parallelFlow
+overriding parallelFlow hook
+parallelFlow hook
+callback for parallelFlow
+... pre hook for parallelFlow (done) ...
+... another pre hook for parallelFlow (done) ...
+
+*/
