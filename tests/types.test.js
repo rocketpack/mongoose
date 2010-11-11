@@ -23,16 +23,16 @@ module.exports = {
   
   'test string type definition': function(){
     var str = type('string')
-      , set = str.setters[0];
+      , cast = str._castSet;
         
     assert.equal('string', str.type);
-    assert.length(str.setters, 1);
-    assert.equal('4', set(4));
-    assert.equal('yay', set('yay'));
+    assert.length(str.setters, 0);
+    assert.equal('4', cast(4));
+    assert.equal('yay', cast('yay'));
 
-    assert.equal(Error, set({}));
-    assert.equal(Error, set([]));
-    assert.equal(Error, set());
+    assert.equal(Error, cast({}));
+    assert.equal(Error, cast([]));
+    assert.equal(Error, cast());
 
     assert.ok(str instanceof TypeSchema);
   },
@@ -41,7 +41,7 @@ module.exports = {
     var str = type('string').strict()
       , set = str.strictSetters[0];
         
-    assert.length(str.setters, 1);
+    assert.length(str.strictSetters, 1);
     assert.equal(Error, set(4));
     assert.equal('yay', set('yay'));
 
@@ -104,17 +104,17 @@ module.exports = {
   
   'test number type definition': function(){
     var n = type('number')
-      , set = n.setters[0];
+      , cast = n._castSet;
     
     assert.equal('number', n.type);
-    assert.length(n.setters, 1);
-    assert.strictEqual(1, set(1));
-    assert.strictEqual(1.5, set(1.5));
-    assert.strictEqual(1.5, set('1.5'));
-    assert.strictEqual(1, set('1'));
-    assert.equal(Error, set('asdf'));
-    assert.equal(Error, set({}));
-    assert.equal(Error, set());
+    assert.length(n.setters, 0);
+    assert.strictEqual(1, cast(1));
+    assert.strictEqual(1.5, cast(1.5));
+    assert.strictEqual(1.5, cast('1.5'));
+    assert.strictEqual(1, cast('1'));
+    assert.equal(Error, cast('asdf'));
+    assert.equal(Error, cast({}));
+    assert.equal(Error, cast());
     assert.ok(n instanceof TypeSchema);
   },
   
@@ -122,7 +122,7 @@ module.exports = {
     var n = type('number').strict()
       , set = n.strictSetters[0];
     
-    assert.length(n.setters, 1);
+    assert.length(n.strictSetters, 1);
     assert.strictEqual(1, set(1));
     assert.strictEqual(1.5, set(1.5));
     assert.equal(Error, set('1.5'));
@@ -133,16 +133,16 @@ module.exports = {
   
   'test boolean type definition': function(){
     var bool = type('boolean')
-      , set = bool.setters[0];
+      , cast = bool._castSet;
     
     assert.equal('boolean', bool.type);
-    assert.length(bool.setters, 1);
-    assert.strictEqual(true, set({}));
-    assert.strictEqual(true, set(1));
-    assert.strictEqual(true, set(true));
-    assert.strictEqual(true, set('1'));
-    assert.strictEqual(false, set(0));
-    assert.strictEqual(false, set(false));
+    assert.length(bool.setters, 0);
+    assert.strictEqual(true, cast({}));
+    assert.strictEqual(true, cast(1));
+    assert.strictEqual(true, cast(true));
+    assert.strictEqual(true, cast('1'));
+    assert.strictEqual(false, cast(0));
+    assert.strictEqual(false, cast(false));
     assert.ok(bool instanceof TypeSchema);
   },
   
@@ -150,7 +150,7 @@ module.exports = {
     var bool = type('boolean').strict()
       , set = bool.strictSetters[0];
     
-    assert.length(bool.setters, 1);
+    assert.length(bool.strictSetters, 1);
 
     assert.equal(Error, set({}));
     assert.equal(Error, set(1));
@@ -163,14 +163,15 @@ module.exports = {
   },
   
   'test date type definition': function(){
-    var date = type('date');
+    var date = type('date'),
+        cast = date._castSet;
     
     assert.equal('date', date.type);
-    assert.length(date.setters, 1);
-    assert.eql(new Date('may 25 1987'), date.setters[0]('may 25 1987'));
-    assert.eql(new Date('may 25 1987'), date.setters[0](new Date('may 25 1987')));
-    assert.equal(Error, date.setters[0]('asdfadsfasdf'));
-    assert.ok(date.setters[0](new Date) instanceof Date);
+    assert.length(date.setters, 0);
+    assert.eql(new Date('may 25 1987'), cast('may 25 1987'));
+    assert.eql(new Date('may 25 1987'), cast(new Date('may 25 1987')));
+    assert.equal(Error, cast('asdfadsfasdf'));
+    assert.ok(cast(new Date) instanceof Date);
     assert.ok(date instanceof TypeSchema);
   },
   
@@ -178,7 +179,7 @@ module.exports = {
     var date = type('date').strict()
       , set = date.strictSetters[0];
     
-    assert.length(date.setters, 1);
+    assert.length(date.strictSetters, 1);
     assert.equal(Error, set('may 25 1987'));
     assert.eql(new Date('may 25 1987'), set(new Date('may 25 1987')));
     assert.equal(Error, set('asdfadsfasdf'));
@@ -204,7 +205,7 @@ module.exports = {
           return complete( /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) );
         });
     
-    assert.equal(email.setters.length, 1);
+    assert.equal(email.setters.length, 0);
     assert.ok(email.parent == 'string');
     assert.ok(typeof email.validators['email'] == 'function');
   },
@@ -217,14 +218,14 @@ module.exports = {
             return complete( /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) );
           });
     
-    assert.equal(email.setters.length, 1);
+    assert.equal(email.setters.length, 0);
     assert.ok(email.parent == 'string');
     assert.ok(typeof email.validators['email'] == 'function');
   },
   
   'test extending with string': function(){
     var phone = type('phone').extend('string');
-    assert.ok(phone.setters.length == 1);
+    assert.ok(phone.setters.length == 0);
     assert.ok(phone.parent == 'string');
   },
   

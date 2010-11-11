@@ -454,7 +454,7 @@ module.exports = {
   },
   
   'test find()/all() query with one condition': function(assert, done){
-    User.find({age:33}).all(function(err, docs){
+    User.find({ age: 33 }).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 1);
       assert.equal('Nathan', docs[0].name.first);
@@ -465,6 +465,15 @@ module.exports = {
         assert.equal('TJ', docs[0].name.first);
         done();
       })
+    });
+  },
+  
+  'test find() type casting': function(assert, done){
+    User.find({ age: '33' }).all(function(err, docs){
+      assert.ok(!err);
+      assert.length(docs, 1);
+      assert.equal('Nathan', docs[0].name.first);
+      done();
     });
   },
   
