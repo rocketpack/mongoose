@@ -67,3 +67,25 @@ function close() {
      db.close();
    });
 }
+
+/*
+ Expected output:
+ 
+ --- creating user 1 ---
+ --- saving user 1 ---
+ ... isEmail validator (sync)
+ ... isUnique validator (async)
+ Save failed
+ validation isEmail failed for email
+ --- fixing user 1 ---
+ --- saving user 1 ---
+ ... isEmail validator (sync)
+ ... isUnique validator (async)
+ --- creating user 2 ---
+ --- saving user 2 ---
+ ... isEmail validator (sync)
+ ... isUnique validator (async)
+ Save failed for second document
+ validation isUnique failed for email
+
+*/
