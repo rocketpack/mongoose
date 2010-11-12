@@ -46,6 +46,12 @@
        next();
      }, 500);
    })
+   .post('serialFlow', function(){
+     console.log('... post hook for serialFlow');
+   })
+   .post('serialFlow', function(){
+     console.log('... another post hook for serialFlow');
+   })
 
    .hook('parallelFlow', function(fn){
      console.log('parallelFlow hook');
@@ -70,6 +76,12 @@
      }, 500);
      next();
    })
+   .post('parallelFlow', function(){
+     console.log('... post hook for parallelFlow');
+   })
+   .post('parallelFlow', function(){
+     console.log('... another post hook for parallelFlow');
+   });
 
 
 
@@ -108,7 +120,12 @@ callback for serialFlow
 overriding parallelFlow hook
 parallelFlow hook
 callback for parallelFlow
+... post hook for parallelFlow
+... another post hook for parallelFlow
+... post hook for serialFlow  // NOTICE serialFlow post hooks fire after parallelFlow post hooks because of the the nested callbacks!
+... another post hook for serialFlow
 ... pre hook for parallelFlow (done) ...
 ... another pre hook for parallelFlow (done) ...
+
 
 */
