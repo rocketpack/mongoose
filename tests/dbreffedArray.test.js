@@ -2,20 +2,23 @@ var assert = require('assert')
   , mongoose = require('mongoose').new()
   , db = mongoose.connect('mongodb://localhost/dbreffedArrayTests');
 
-mongoose.define('Thought')
+var ThoughtSchema = mongoose.define('Thought'),
+    UserSchema = mongoose.define('CoolUser');
+var Thought = mongoose.Thought;
+var User = mongoose.CoolUser;
+
+ThoughtSchema
   .oid('_id')
   .string('descr')
-  .dbref('thinker', mongoose.User);
-var Thought = mongoose.Thought;
+  .dbref('thinker', User);
 
-mongoose.define('CoolUser')
+UserSchema
   .oid('_id')
   .string('name')
   .dbreffedArray('thoughts', Thought, {as: 'thinker'});
 //    .page({limit: 10}); // TODO Add in this default pagination syntax
                           // TODO Implement the accompanying schemaType page method variation
                           // TODO ... .page(3), equiv to .page({limit: 10, skip: 20})
-var User = mongoose.CoolUser;
 
 // TODO Test forEach, slice, splice, filter, map
 module.exports = {
