@@ -357,7 +357,6 @@ module.exports = {
       });
      
     var PreHooks = mongoose.PreHooks;
-    
     var ph = new PreHooks({test: 'hi'},true);
     assert.ok(ph._.doc.test == 'hi');
     assert.ok(total == 2);
@@ -397,7 +396,9 @@ module.exports = {
     
     var ph = new PostHooks({test: 'hi'},true);
     assert.ok(ph._.doc.test == 'hi');
-    assert.ok(total == 2);
+    process.nextTick(function(){
+      assert.ok(total == 2);
+    });
   },
   
   'test pre/override/post hooks together': function(){
@@ -431,7 +432,9 @@ module.exports = {
     
     var ah = new AllHooks({test: 'hi'},true);
     assert.ok(ah._.doc.test == 'hi');
-    assert.ok(total == 5);
+    process.nextTick(function(){
+      assert.ok(total == 5);
+    });
   },
   
   'test hydration w/ arrays': function(){
