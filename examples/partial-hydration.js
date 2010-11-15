@@ -76,8 +76,16 @@
           console.log('age hydrated: ', doc.hydrated('age'));
           
            console.log('-------- not contact, yes name --------');
+           console.log('-------- positive/negative queries create errors --------');
+           console.log('-------- mongoose takes first and excludes anything not matching --------');
           User.find({},{contact: false, name: true}).one(function(err, doc){
-            if(err) console.log(err)
+            console.log("Name: " + doc.name);
+            console.log("Age: " + doc.age);
+            console.log("Contact: " + JSON.stringify(doc.contact));
+            console.log('contact hydrated: ', doc.hydrated('contact'));
+            console.log('contact.phone hydrated: ', doc.hydrated('contact.phone'));
+            console.log('name hydrated: ', doc.hydrated('name'));
+            console.log('age hydrated: ', doc.hydrated('age'));
     
             User.drop(function(){
               db.close();
@@ -110,8 +118,8 @@
   contact.phone hydrated:  false
   name hydrated:  false
   age hydrated:  true
-  -------- not contact -------- // issues with 'not'
-  Name: undefined
+  -------- not contact --------
+  Name: [object Object]
   Age: 91
   Contact: undefined
   contact hydrated:  false
@@ -119,8 +127,14 @@
   name hydrated:  true
   age hydrated:  true
   -------- not contact, yes name --------
-  { message: 'You cannot currently mix including and excluding fields. Contact us if this is an issue.'
-  , stack: [Getter/Setter]
-  }
-  
+  -------- positive/negative queries create errors --------
+  -------- mongoose takes first and excludes anything not matching --------
+  Name: [object Object]
+  Age: 91
+  Contact: undefined
+  contact hydrated:  false
+  contact.phone hydrated:  false
+  name hydrated:  true
+  age hydrated:  true
+
 */

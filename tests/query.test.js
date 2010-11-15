@@ -217,8 +217,8 @@ module.exports = {
     User.find({ 'name.first': 'Nathan' }, { 'name.first': true }).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 1);
- //     assert.equal('Nathan', docs[0].name.first);
- //     assert.isUndefined(docs[0].name.last);
+      assert.equal('Nathan', docs[0].name.first);
+      assert.isUndefined(docs[0].name.last);
       assert.isUndefined(docs[0].age);
       assert.eql(undefined, docs[0].contact);
       done();
