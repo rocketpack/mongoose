@@ -45,7 +45,6 @@
   user.save(function(err){
     
     User.find({ 'name.last': 'Melville' }, { contact: true }).one(function(err, doc){
-//      console.log(doc.contact.phone)
       console.log('-------- contact only --------');
       console.log("Name: ", doc.name);
       console.log("Age: " + doc.age);
@@ -76,9 +75,15 @@
           console.log('name hydrated: ', doc.hydrated('name'));
           console.log('age hydrated: ', doc.hydrated('age'));
           
-          User.drop(function(){
-            db.close();
-          });
+           console.log('-------- not contact, yes name --------');
+          User.find({},{contact: false, name: true}).one(function(err, doc){
+            if(err) console.log(err)
+    
+            User.drop(function(){
+              db.close();
+            });
+            
+          })
           
         });
       });
@@ -105,7 +110,7 @@
   contact.phone hydrated:  false
   name hydrated:  false
   age hydrated:  true
-  -------- not contact --------
+  -------- not contact -------- // issues with 'not'
   Name: undefined
   Age: 91
   Contact: undefined
@@ -113,5 +118,9 @@
   contact.phone hydrated:  false
   name hydrated:  true
   age hydrated:  true
+  -------- not contact, yes name --------
+  { message: 'You cannot currently mix including and excluding fields. Contact us if this is an issue.'
+  , stack: [Getter/Setter]
+  }
   
 */
