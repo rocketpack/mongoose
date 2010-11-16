@@ -351,8 +351,8 @@ module.exports = {
     User.find({ visits: { $gt: 10 }}).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     });
   },
@@ -361,8 +361,8 @@ module.exports = {
     User.find('visits', { $gt: 10 }).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     });
   },
@@ -371,8 +371,8 @@ module.exports = {
     User.find({ roles: { $nin: ['pet'] }}).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     })
   },
@@ -381,8 +381,8 @@ module.exports = {
     User.find({ roles: { $in: ['admin'] }}).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     })
   },
@@ -399,8 +399,8 @@ module.exports = {
     User.withRole('admin').all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     })
   },
@@ -409,8 +409,8 @@ module.exports = {
     User.withoutRole('pet').all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     })
   },
@@ -419,8 +419,8 @@ module.exports = {
     User.withoutRole(['pet', 'dog']).all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     })
   },
@@ -438,8 +438,8 @@ module.exports = {
     User.awesome.withRole('admin').all(function(err, docs){
       assert.ok(!err);
       assert.length(docs, 2);
-      assert.equal('Nathan', docs[0].name.first);
-      assert.equal('TJ', docs[1].name.first);
+      assert.equal('Nathan', docs[1].name.first);
+      assert.equal('TJ', docs[0].name.first);
       done();
     })
   },
