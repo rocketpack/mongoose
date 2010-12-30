@@ -4,3 +4,6 @@
 [submodule "tests/integration/support/expresso"]
 	path = tests/integration/support/expresso
 	url = git://github.com/visionmedia/expresso.git
+[submodule "lib/support/node-mongodb-native"]
+	path = lib/support/node-mongodb-native
+	url = https://github.com/rocketpack/node-mongodb-native.git
