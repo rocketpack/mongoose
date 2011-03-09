@@ -2,7 +2,7 @@ require.paths.unshift('.')
 var assert = require('assert'),
     mongoose = require('mongoose').Mongoose,
     mongo = require('mongodb'),
-    ObjectID = require('mongodb/bson/bson').ObjectID;
+    ObjectID = require('mongodb').BSONNative.ObjectID;
 
 require('lib/tests');
 

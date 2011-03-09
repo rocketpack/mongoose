@@ -1,6 +1,6 @@
 Model = require('lib/model').Model
 mongoose = require('mongoose').Mongoose
-ObjectID = require('mongodb').ObjectID
+ObjectID = require('mongodb').BSONNative.ObjectID
     
 mongoose.model('User', {
   
